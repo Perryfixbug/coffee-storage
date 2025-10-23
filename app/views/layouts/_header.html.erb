@@ -1,0 +1,44 @@
+<header class="fixed top-0 left-0 right-0 bg-[#4A90E2] h-12 flex items-center justify-between px-6 shadow-md z-50">
+  <!-- Logo -->
+  <div class="flex items-center space-x-2">
+    <div class="bg-white px-2 py-1 rounded text-[#4A90E2] font-bold">LOGO</div>
+  </div>
+
+  <!-- Search -->
+  <div class="relative">
+    <input
+      type="text"
+      placeholder="Search"
+      class="pl-8 pr-3 py-1 text-sm rounded bg-white text-gray-800 focus:outline-none"
+    >
+    <svg xmlns="http://www.w3.org/2000/svg"
+         class="w-4 h-4 absolute left-2 top-2 text-gray-500"
+         fill="none" viewBox="0 0 24 24" stroke="currentColor">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+            d="M21 21l-4.35-4.35M11 19a8 8 0 100-16 8 8 0 000 16z" />
+    </svg>
+  </div>
+
+  <!-- Profile Dropdown -->
+  <% if logged_in? %>
+    <div class="relative group">
+      <button class="flex items-center space-x-2 focus:outline-none">
+        <div class="w-8 h-8 rounded-full bg-gray-300 flex items-center justify-center text-sm font-semibold text-gray-700">
+          <%= current_user.fullname[0].upcase rescue "U" %>
+        </div>
+        <span class="text-gray-700 font-medium"><%= current_user.fullname %></span>
+        <i class="fa-solid fa-caret-down text-gray-500"></i>
+      </button>
+
+      <!-- Dropdown -->
+      <div class="absolute right-0 mt-2 w-48 bg-white rounded-xl shadow-lg border opacity-0 group-hover:opacity-100 invisible group-hover:visible transition duration-200">
+        <%= link_to "Profile", "#", class: "block px-4 py-2 text-gray-700 hover:bg-gray-100 rounded-t-xl" %>
+        <%= link_to "Settings", "#", class: "block px-4 py-2 text-gray-700 hover:bg-gray-100" %>
+        <%= button_to "Logout", logout_url, method: :delete,
+              class: "block w-full text-left px-4 py-2 text-red-600 hover:bg-gray-100 rounded-b-xl" %>
+      </div>
+    </div>
+  <% else %>
+    <%= link_to "Login", login_path, class: "text-gray-700 hover:text-gray-900 font-medium" %>
+  <% end %>
+</header>
