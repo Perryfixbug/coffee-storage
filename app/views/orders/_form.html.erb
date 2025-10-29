@@ -1,0 +1,91 @@
+<%= form_with model: @order, local: true, class: "space-y-6" do |f| %>
+
+  <!-- PHẦN TÌM ĐẠI LÝ -->
+  <div class="border p-4 rounded-md bg-gray-50">
+    <h2 class="text-lg font-medium mb-3">Tìm đại lý</h2>
+    <div class="flex gap-2">
+      <%= text_field_tag :agency_query, params[:agency_query],
+          placeholder: "Nhập ID hoặc tên đại lý...",
+          class: "border p-2 rounded-md w-full" %>
+
+      <%= button_tag "Tìm kiếm",
+          type: "submit",
+          name: "search_agency",
+          value: "true",
+          class: "bg-blue-600 text-white px-4 py-2 rounded-md" %>
+    </div>
+
+    <% if @agency.present? %>
+      <div class="mt-3 text-gray-700">
+        <p><strong>Đại lý:</strong> <%= @agency.name %> (ID: <%= @agency.id %>)</p>
+        <%= f.hidden_field :agency_id, value: @agency.id %>
+      </div>
+    <% end %>
+  </div>
+
+  <!-- PHẦN TÌM SẢN PHẨM -->
+  <div class="border p-4 rounded-md bg-gray-50">
+    <h2 class="text-lg font-medium mb-3">Thêm sản phẩm</h2>
+    <div class="flex gap-2">
+      <%= text_field_tag :product_query, params[:product_query],
+          placeholder: "Nhập tên hoặc mã sản phẩm...",
+          class: "border p-2 rounded-md w-full" %>
+
+      <%= button_tag "Tìm kiếm",
+          type: "submit",
+          name: "search_product",
+          value: "true",
+          class: "bg-green-600 text-white px-4 py-2 rounded-md" %>
+    </div>
+
+    <% if @products.present? %>
+      <div class="mt-3">
+        <h3 class="font-medium mb-2">Kết quả tìm kiếm:</h3>
+        <ul class="divide-y border rounded-md">
+          <% @products.each do |product| %>
+            <li class="p-2 flex justify-between items-center">
+              <span><%= product.name %> (Mã: <%= product.id %>)</span>
+              <%= button_to "Chọn",
+                  # add_product_orders_path(product_id: product.id),
+                  method: :post,
+                  class: "bg-blue-500 text-white px-3 py-1 rounded-md text-sm" %>
+            </li>
+          <% end %>
+        </ul>
+      </div>
+    <% end %>
+  </div>
+
+  <!-- DANH SÁCH SẢN PHẨM ĐÃ CHỌN -->
+  <% if @order.ordered_products.any? %>
+    <div class="border p-4 rounded-md">
+      <h2 class="text-lg font-medium mb-3">Sản phẩm đã chọn</h2>
+      <table class="w-full border text-left">
+        <thead>
+          <tr class="bg-gray-100">
+            <th class="p-2 border">Tên sản phẩm</th>
+            <th class="p-2 border w-32">Số lượng</th>
+          </tr>
+        </thead>
+        <tbody>
+          <%= f.fields_for :ordered_products do |of| %>
+            <tr>
+              <td class="p-2 border"><%= of.object.product&.name || "—" %></td>
+              <td class="p-2 border">
+                <%= of.number_field :quantity,
+                      class: "border rounded p-1 w-full",
+                      min: 1 %>
+              </td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+  <% end %>
+
+  <div class="flex justify-end">
+    <%= f.submit "Xác nhận đơn hàng",
+        class: "bg-blue-700 text-white px-6 py-2 rounded-md font-medium" %>
+  </div>
+
+<% end %>

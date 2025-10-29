@@ -30,4 +30,8 @@ module SessionsHelper
     cookies.delete :user_id
     cookies.delete :remember
   end
+
+  def require_login
+    redirect_to login_url unless logged_in?
+  end
 end

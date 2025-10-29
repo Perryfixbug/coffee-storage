@@ -1,0 +1,47 @@
+<h1 class="text-2xl font-semibold mb-4">Chi tiết đơn hàng #<%= @order.id %></h1>
+
+<div class="mb-4">
+  <p><strong>Đại lý:</strong> <%= @order.agency.name %></p>
+  <p><strong>Người tạo:</strong> <%= @order.user.fullname %></p>
+  <p><strong>Ngày tạo:</strong> <%= l(@order.created_at, format: :long) %></p>
+</div>
+
+<h2 class="text-xl font-semibold mb-2">Sản phẩm trong đơn</h2>
+
+<table class="min-w-full border border-gray-300 rounded-md text-sm">
+  <thead class="bg-gray-100">
+    <tr>
+      <th class="p-2 border">Tên sản phẩm</th>
+      <th class="p-2 border">Đơn giá</th>
+      <th class="p-2 border">Số lượng</th>
+      <th class="p-2 border">Đơn vị</th>
+      <th class="p-2 border text-right">Thành tiền</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% total = 0 %>
+    <% @order.ordered_products.each do |item| %>
+      <% line_total = (item.price_per_unit || 0) * item.quantity %>
+      <% total += line_total %>
+      <tr>
+        <td class="p-2 border"><%= item.product.name %></td>
+        <td class="p-2 border text-right"><%= number_to_currency(item.price_per_unit, unit: "₫", precision: 0) %></td>
+        <td class="p-2 border text-center"><%= item.quantity %></td>
+        <td class="p-2 border text-center"><%= item.product.unit %></td>
+        <td class="p-2 border text-right font-medium text-green-700"><%= number_to_currency(line_total, unit: "₫", precision: 0) %></td>
+      </tr>
+    <% end %>
+  </tbody>
+  <tfoot>
+    <tr class="bg-gray-100 font-semibold">
+      <td colspan="4" class="p-2 border text-right">Tổng cộng:</td>
+      <td class="p-2 border text-right text-green-700">
+        <%= number_to_currency(total, unit: "₫", precision: 0) %>
+      </td>
+    </tr>
+  </tfoot>
+</table>
+
+<div class="mt-6">
+  <%= link_to "← Quay lại danh sách", orders_path, class: "text-blue-600 hover:underline" %>
+</div>

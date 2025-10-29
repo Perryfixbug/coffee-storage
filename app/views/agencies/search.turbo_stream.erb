@@ -1,0 +1,8 @@
+<% @agencies.each do |agency| %>
+  <div class="p-2 hover:bg-gray-100 cursor-pointer"
+       data-action="click->search-select#select"
+       data-id="<%= agency.id %>"
+       data-name="<%= agency.name %>">
+    <%= agency.name %>
+  </div>
+<% end %>

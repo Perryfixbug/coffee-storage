@@ -1,0 +1,49 @@
+<div class="flex gap-2 items-center mb-4">
+  <!-- Title -->
+  <h1 class="text-2xl font-bold">Products List</h1>
+
+  <!-- Search -->
+  <div class="relative">
+    <input
+      type="text"
+      placeholder="Search"
+      class="pl-8 pr-3 py-1 text-sm rounded bg-gray-200 text-gray-800 focus:outline-none"
+    >
+    <svg xmlns="http://www.w3.org/2000/svg"
+          class="w-4 h-4 absolute left-2 top-2 text-gray-500"
+          fill="none" viewBox="0 0 24 24" stroke="currentColor">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+            d="M21 21l-4.35-4.35M11 19a8 8 0 100-16 8 8 0 000 16z" />
+    </svg>
+  </div>
+
+  <%= link_to "Add product", new_product_path, class: "bg-blue-500 px-2 py-1 text-white text-sm font-medium rounded-sm" %>
+</div>
+
+<!-- Table -->
+<table class="min-w-full bg-white shadow rounded-lg overflow-hidden">
+  <thead class="bg-gray-100 border-b">
+    <tr>
+      <th class="px-4 py-2 text-left">#</th>
+      <th class="px-4 py-2 text-left">Code</th>
+      <th class="px-4 py-2 text-left">Name</th>
+      <th class="px-4 py-2 text-left">Unit</th>
+      <th class="px-4 py-2 text-left">Price</th>
+      <th class="px-4 py-2 text-left">Quantity</th>
+      <th class="px-4 py-2 text-left">Detail</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @products.each_with_index do |product, index| %>
+      <tr class="border-b hover:bg-gray-50">
+        <td class="px-4 py-2"><%= index + 1 %></td>
+        <td class="px-4 py-2"><%= product.product_code %></td>
+        <td class="px-4 py-2 font-medium"><%= product.name %></td>
+        <td class="px-4 py-2"><%= product.unit %></td>
+        <td class="px-4 py-2"><%= number_to_currency(product.price_per_unit) %></td>
+        <td class="px-4 py-2"><%= product.quantity %></td>
+        <td class="px-4 py-2 text-gray-600"><%= product.detail %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
