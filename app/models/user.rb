@@ -1,6 +1,8 @@
 class User < ApplicationRecord
   has_secure_password
   attr_accessor :remember_token
+  validates :name, presence: true, length: { maximum: 100 }
+  validates :email, presence: true, uniqueness: true, format: { with: URI::MailTo::EMAIL_REGEXP }
 
   def remember
     @remember_token = User.new_token

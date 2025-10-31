@@ -1,21 +1,15 @@
-class OrdersController < ApplicationController
-  include SessionsHelper
-  before_action :set_order, only: %i[ show ]
-  before_action :set_agencies, only: [ :new, :create ]
-  before_action :set_products, only: [ :new, :create ]
-
+class ImportOrdersController < OrdersController
   # GET /orders or /orders.json
   def index
-    @orders = Order.includes(:agency, :user).order(created_at: :desc)
+    @orders = ImportOrder.includes(:agency, :user).order(created_at: :desc)
   end
 
   # GET /orders/1 or /orders/1.json
-  def show
-  end
+  def show ; end
 
   # GET /orders/new
   def new
-    @order = Order.new(user: current_user)
+    @order = ImportOrder.new(user: current_user)
 
     if params[:search_agency]
       @agency = Agency.find_by(id: params[:agency_query]) || Agency.find_by(name: params[:agency_query])
@@ -26,7 +20,7 @@ class OrdersController < ApplicationController
 
   # POST /orders or /orders.json
   def create
-    @order = Order.new(order_params)
+    @order = ImportOrder.new(order_params)
     @order.user = current_user  # gắn user hiện tại
 
     # Gán giá cho từng OrderedProduct trước khi lưu
@@ -34,6 +28,7 @@ class OrdersController < ApplicationController
       product = Product.find_by(id: op.product_id)
       op.price_per_unit = product.price_per_unit if product.present?
     end
+    byebug
 
     if @order.save
       redirect_to @order, notice: "Tạo đơn hàng thành công!"
@@ -44,24 +39,16 @@ class OrdersController < ApplicationController
   end
 
   private
-  # Use callbacks to share common setup or constraints between actions.
-  def set_order
-    @order = Order.find(params.expect(:id))
-  end
-
-  def set_agencies
-    @agencies = Agency.all
-  end
-
-  def set_products
-    @products = Product.all
-  end
-
-  # Only allow a list of trusted parameters through.
   def order_params
-    params.require(:order).permit(
+    # Gộp ordered_products từ params[:order] vào params[:import_order]
+    if params[:order].present? && params[:order][:ordered_products_attributes].present?
+      params[:import_order] ||= {}
+      params[:import_order][:ordered_products_attributes] = params[:order][:ordered_products_attributes]
+    end
+
+    params.require(:import_order).permit(
       :agency_id,
-      ordered_products_attributes: [ :product_id, :quantity, :_destroy ]
+      ordered_products_attributes: [:product_id, :quantity, :_destroy]
     )
   end
 end
