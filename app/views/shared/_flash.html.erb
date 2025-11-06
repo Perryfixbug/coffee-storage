@@ -1,0 +1,34 @@
+<% flash.each do |key, message| %>
+  <%# Ánh xạ kiểu flash sang màu Tailwind %>
+  <% alert_class = case key.to_sym
+      when :notice then "bg-green-100 border-green-400 text-green-800"
+      when :success then "bg-green-100 border-green-400 text-green-800"
+      when :alert then "bg-yellow-100 border-yellow-400 text-yellow-800"
+      when :error then "bg-red-100 border-red-400 text-red-800"
+      else "bg-blue-100 border-blue-400 text-blue-800"
+    end %>
+
+  <div
+    class="flash-message flex items-center justify-between border-l-4 p-4 mb-3 rounded transition-opacity duration-300 <%= alert_class %>"
+    data-controller="flash"
+    data-flash-target="container"
+  >
+    <div class="flex items-center gap-2">
+      <%# 🔹 Icon cho từng loại thông báo %>
+      <% if key.to_sym == :notice || key.to_sym == :success %>
+        <i class="fa-solid fa-circle-check text-green-500"></i>
+      <% elsif key.to_sym == :error %>
+        <i class="fa-solid fa-circle-xmark text-red-500"></i>
+      <% else %>
+        <i class="fa-solid fa-circle-info text-blue-500"></i>
+      <% end %>
+      <span class="font-medium"><%= message %></span>
+    </div>
+    <button
+      data-action="click->flash#close"
+      class="text-gray-500 hover:text-gray-700"
+    >
+      ✕
+    </button>
+  </div>
+<% end %>

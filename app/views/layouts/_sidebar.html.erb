@@ -17,7 +17,7 @@
         </svg>
         Tổng quan
       </button>
-      <div data-dropdown-target="menu" class="hidden">
+      <div data-dropdown-target="menu" class="hidden menu">
         <%= link_to root_path, class: "flex items-center px-6 py-2 hover:bg-blue-50 hover:text-blue-600 transition rounded-r-full" do %>
           <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -45,13 +45,13 @@
         </svg>
         Quản lý kho</button>
       <%# Menu %>
-      <div data-dropdown-target="menu" class="hidden">
+      <div data-dropdown-target="menu" class="hidden menu">
         <%= link_to products_path, class: "flex items-center px-6 py-2 hover:bg-blue-50 hover:text-blue-600 transition rounded-r-full" do %>
-          <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                  d="M3 7h18M3 12h18M3 17h18" />
+                  d="M20 7l-8-4-8 4m16 0v10l-8 4-8-4V7m16 0L12 11 4 7" />
           </svg>
-          Inventory
+          Products
         <% end %>
 
         <%= link_to import_orders_path, class: "flex items-center px-6 py-2 hover:bg-blue-50 hover:text-green-600 transition rounded-r-full" do %>
@@ -100,7 +100,7 @@
         Nhân sự
       </button>
       <%# Menu %>
-      <div data-dropdown-target="menu" class="hidden">
+      <div data-dropdown-target="menu" class="hidden menu">
         <%= link_to users_path, class: "flex items-center px-6 py-2 hover:bg-blue-50 hover:text-blue-600 transition rounded-r-full" do %>
           <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -127,7 +127,7 @@
         </svg>
         Hệ thống
       </button>
-      <div data-dropdown-target="menu" class="hidden">
+      <div data-dropdown-target="menu" class="hidden menu">
         <%= link_to stat_path, class: "flex items-center px-6 py-2 hover:bg-blue-50 hover:text-blue-600 transition rounded-r-full" do %>
           <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -155,3 +155,9 @@
     </div>
   </nav>
 </aside>
+
+<style>
+nav .menu{
+  margin-left: 20px;
+}
+</style>

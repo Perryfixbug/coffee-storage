@@ -1,5 +1,4 @@
 class UsersController < ApplicationController
-  include SessionsHelper
   before_action :require_login, only: %i[ show edit update destroy ]
   before_action :set_user, only: %i[ show edit update destroy ]
 

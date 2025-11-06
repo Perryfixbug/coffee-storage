@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  get "csv/create"
   resources :ordered_products
   resources :orders
   resources :import_orders, controller: "import_orders"
@@ -18,5 +19,8 @@ Rails.application.routes.draw do
   get "/about", to: "static_pages#about"
   get "/help",  to: "static_pages#help"
   get "/profile", to: "users#profile"
+  post "/csv/create", to: "csv#create"
+  require "sidekiq/web"
+  mount Sidekiq::Web => "/sidekiq"  # http://localhost:3000/sidekiq
   root "static_pages#home"
 end

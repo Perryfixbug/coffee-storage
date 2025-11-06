@@ -1,7 +1,8 @@
 begin
   require "will_paginate"
-  require "will_paginate/view_helpers"
+  require "will_paginate/view_helpers/action_view"
 rescue LoadError
+  # nếu gem chưa cài, tránh crash server
 end
 
 module TailwindPaginationHelper

@@ -17,7 +17,9 @@
     </svg>
   </div>
 
-  <%= link_to "Add product", new_product_path, class: "bg-blue-500 px-2 py-1 text-white text-sm font-medium rounded-sm" %>
+  <%# Thêm dữ liệu %>
+  <%= link_to "Add product", new_product_path, class: "bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded-md transition" %>
+  <%= render "csv/form", type: "Product" %>
 </div>
 
 <!-- Table -->
