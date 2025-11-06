@@ -17,5 +17,6 @@ Rails.application.routes.draw do
   get "/stat",  to: "static_pages#stat"
   get "/about", to: "static_pages#about"
   get "/help",  to: "static_pages#help"
+  get "/profile", to: "users#profile"
   root "static_pages#home"
 end

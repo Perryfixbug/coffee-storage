@@ -47,3 +47,8 @@
     <% end %>
   </tbody>
 </table>
+
+<!-- Pagination -->
+<div class="mt-4">
+  <%= will_paginate @orders, renderer: TailwindPaginationHelper::LinkRenderer %>
+</div> 

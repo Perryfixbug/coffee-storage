@@ -1,7 +1,9 @@
 class ExportOrdersController < OrdersController
   # GET /orders or /orders.json
   def index
-    @orders = ExportOrder.includes(:agency, :user).order(created_at: :desc)
+    @orders = ExportOrder.includes(:agency, :user)
+                  .order(created_at: :desc)
+                  .paginate(page: params[:page], per_page: 10)
   end
 
   # GET /orders/1 or /orders/1.json
