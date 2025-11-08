@@ -1,8 +1,0 @@
-<% @products.each do |product| %>
-  <div class="p-2 hover:bg-gray-100 cursor-pointer"
-       data-action="click->search-select#select"
-       data-id="<%= product.id %>"
-       data-name="<%= product.name %>">
-    <%= product.name %>
-  </div>
-<% end %>
