@@ -1,6 +1,9 @@
 class User < ApplicationRecord
-  has_secure_password
   attr_accessor :remember_token
+  has_secure_password
+  has_many :orders, dependent: :destroy
+  has_many :notifications, dependent: :destroy
+
   validates :fullname, presence: true, length: { maximum: 100 }
   validates :email, presence: true, uniqueness: true, format: { with: URI::MailTo::EMAIL_REGEXP }
 

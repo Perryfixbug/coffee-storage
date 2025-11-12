@@ -28,7 +28,7 @@ class SearchsController < ApplicationController
         Product.where("LOWER(name) LIKE ?", "%#{query.downcase}%")
       end
 
-    render json: results.limit(10).select(:id, :name)
+    render json: results.limit(10)
   end
 
   def agencySearch

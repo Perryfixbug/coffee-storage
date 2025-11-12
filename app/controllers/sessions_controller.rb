@@ -1,7 +1,6 @@
 class SessionsController < ApplicationController
-  include SessionsHelper
   layout "auth", only: %i[new create destroy]
-  
+
   def new
   end
 

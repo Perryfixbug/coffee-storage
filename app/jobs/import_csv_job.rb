@@ -4,6 +4,7 @@ class ImportCsvJob < ApplicationJob
   queue_as :imports
 
   def perform(file_path, user_id, type)
+    user = User.find(user_id)
     model = type.constantize
     valid_columns = model.column_names.map(&:to_sym)
 
@@ -22,5 +23,12 @@ class ImportCsvJob < ApplicationJob
 
     # Dọn file tạm sau khi xong
     File.delete(file_path) if File.exist?(file_path)
+
+    # Gửi notification thành công
+    NotificationService.notify(
+      user,
+      noti_type: "success",
+      content: "Nhập CSV #{File.basename(file_path)} thành công"
+    )
   end
 end

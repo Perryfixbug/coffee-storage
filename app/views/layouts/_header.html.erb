@@ -1,7 +1,7 @@
 <header class="fixed top-0 left-0 right-0 bg-[#4A90E2] h-12 flex items-center justify-between px-6 shadow-md z-50">
   <!-- Logo -->
   <div class="flex items-center space-x-2">
-    <div class="bg-white px-2 py-1 rounded text-[#4A90E2] font-bold">LOGO</div>
+    <div class="bg-white px-2 py-1 rounded text-[#4A90E2] font-bold">Warehouse Pro</div>
   </div>
 
   <!-- Search -->
@@ -23,32 +23,94 @@
     </div>
   </div>
 
-  <!-- Profile Dropdown -->
+  <!-- Right side: Notification + Profile -->
   <% if logged_in? %>
-    <div class="relative group" data-controller="dropdown" 
-      data-action="mouseenter->dropdown#show mouseleave->dropdown#hide"
-    >
-      <button class="flex items-center space-x-2 focus:outline-none hover:cursor-pointer">
-        <div class="w-8 h-8 rounded-full bg-gray-300 flex items-center justify-center text-sm font-semibold text-gray-700">
-          <%= current_user.fullname[0].upcase rescue "U" %>
-        </div>
-        <span class="text-gray-700 font-medium"><%= current_user.fullname %></span>
-        <i class="fa-solid fa-caret-down text-gray-500"></i>
-      </button>
-
-      <!-- Dropdown -->
-      <div
-        data-dropdown-target="menu"
-        class="absolute right-0 mt-2 w-48 bg-white rounded-xl shadow-lg border 
-        opacity-0 invisible transition duration-200"
+    <div class="flex items-center space-x-4">
+      
+      <!-- Notification Dropdown -->
+      <div class="relative" data-controller="dropdown notification" 
+        data-action="mouseenter->dropdown#show mouseleave->dropdown#hide"
       >
-        <%= link_to "Profile", "/profile", class: "block px-4 py-2 text-gray-700 hover:bg-gray-100 rounded-t-xl" %>
-        <%= link_to "Settings", "#", class: "block px-4 py-2 text-gray-700 hover:bg-gray-100" %>
-        <%= button_to "Logout", logout_url, method: :delete,
-              class: "block w-full text-left px-4 py-2 text-red-600 hover:bg-gray-100 rounded-b-xl" %>
+        <button class="relative focus:outline-none hover:cursor-pointer p-2 hover:bg-gray-300 rounded-full transition">
+          <!-- Bell Icon -->
+          <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 text-white" viewBox="0 0 24 24" stroke="currentColor" fill="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+                  d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
+          </svg>
+          
+          <!-- Badge for unread count -->
+          <% if (noti_count = current_user.notifications.unread.count ) > 0 %>
+            <span
+              data-notification-target="count" 
+              class="absolute top-0 right-0 bg-red-500 text-white text-xs font-bold rounded-full h-5 w-5 flex items-center justify-center">
+              <%= noti_count %>
+            </span>
+          <% end %>
+        </button>
+
+        <!-- Notification Dropdown Menu -->
+        <div
+          data-dropdown-target="menu"
+          class="absolute right-0 mt-2 w-80 bg-white rounded-xl shadow-lg border 
+          opacity-0 invisible transition duration-200 max-h-96 overflow-hidden flex flex-col"
+        >
+          <!-- Header -->
+          <div class="px-4 py-3 bg-gray-50 rounded-t-xl">
+            <div class="flex items-center justify-between">
+              <h3 class="font-semibold text-gray-800">Notifications</h3>
+              <button data-action="click->notification#markAllRead"
+                      class="text-xs text-blue-600 hover:text-blue-800 hover:cursor-pointer font-medium"
+              >Mark all as read</button>
+              <span class="text-xs bg-blue-500 text-white px-2 py-1 rounded-full"><%= current_user.notifications.unread.count %> new</span>
+            </div>
+          </div>
+
+          <!-- Notification List -->
+          <div data-notification-target="list" class="overflow-y-auto flex-1">
+            <% current_user.notifications.order(created_at: :desc).limit(10).each do |n| %>
+              <div class="px-3 py-2 text-sm hover:bg-gray-100 border-b border-gray-100 cursor-pointer">
+                <%= n.content %>
+              </div>
+            <% end %>
+          </div>
+
+          <!-- Footer -->
+          <div class="px-4 py-3 border-t bg-gray-50 rounded-b-xl flex justify-center">
+            <button data-action="notification#clearAll"
+                    class="text-sm text-blue-600 hover:text-blue-800 font-medium text-center block hover:cursor-pointer"
+            >
+              Clear all notifications
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Profile Dropdown -->
+      <div class="relative group" data-controller="dropdown" 
+        data-action="mouseenter->dropdown#show mouseleave->dropdown#hide"
+      >
+        <button class="flex items-center space-x-2 focus:outline-none hover:cursor-pointer">
+          <div class="w-8 h-8 rounded-full bg-gray-300 flex items-center justify-center text-sm font-semibold text-gray-700">
+            <%= current_user.fullname[0].upcase rescue "U" %>
+          </div>
+          <span class="text-white font-medium"><%= current_user.fullname %></span>
+          <i class="fa-solid fa-caret-down text-white"></i>
+        </button>
+
+        <!-- Dropdown -->
+        <div
+          data-dropdown-target="menu"
+          class="absolute right-0 mt-2 w-48 bg-white rounded-xl shadow-lg border 
+          opacity-0 invisible transition duration-200"
+        >
+          <%= link_to "Profile", "/profile", class: "block px-4 py-2 text-gray-700 hover:bg-gray-100 rounded-t-xl" %>
+          <%= link_to "Settings", "#", class: "block px-4 py-2 text-gray-700 hover:bg-gray-100" %>
+          <%= button_to "Logout", logout_url, method: :delete,
+                class: "block w-full text-left px-4 py-2 text-red-600 hover:bg-gray-100 rounded-b-xl" %>
+        </div>
       </div>
     </div>
   <% else %>
-    <%= link_to "Login", login_path, class: "text-gray-700 hover:text-gray-900 font-medium" %>
+    <%= link_to "Login", login_path, class: "text-white hover:text-gray-200 font-medium" %>
   <% end %>
 </header>
