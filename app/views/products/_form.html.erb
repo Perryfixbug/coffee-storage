@@ -37,6 +37,6 @@
 
   <div class="flex justify-end gap-3 pt-3 border-t border-gray-100">
     <%= link_to "Hủy", products_path, class: "px-4 py-2 border border-gray-300 rounded-md text-gray-600 hover:bg-gray-100 transition" %>
-    <%= f.submit (product.new_record? ? "Thêm sản phẩm" : "Cập nhật"), class: "px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition" %>
+    <%= f.submit (product.new_record? ? "Xác nhận" : "Cập nhật"), class: "px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 transition" %>
   </div>
 <% end %>

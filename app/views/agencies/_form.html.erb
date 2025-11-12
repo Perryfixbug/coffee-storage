@@ -1,9 +1,8 @@
-<%= form_with(model: agency, class: "contents") do |form| %>
+<%= form_with model: agency, local: true, class: "bg-white p-6 rounded-lg shadow-sm border border-gray-200 max-w-2xl" do |f| %>
   <% if agency.errors.any? %>
-    <div id="error_explanation" class="bg-red-50 text-red-500 px-3 py-2 font-medium rounded-md mt-3">
-      <h2><%= pluralize(agency.errors.count, "error") %> prohibited this agency from being saved:</h2>
-
-      <ul class="list-disc ml-6">
+    <div class="bg-red-50 border border-red-200 text-red-600 p-4 rounded-md mb-5">
+      <h2 class="font-semibold mb-2"><%= pluralize(agency.errors.count, "error") %> không thể lưu đại lý:</h2>
+      <ul class="list-disc ml-5 text-sm space-y-1">
         <% agency.errors.each do |error| %>
           <li><%= error.full_message %></li>
         <% end %>
@@ -11,27 +10,44 @@
     </div>
   <% end %>
 
-  <div class="my-5">
-    <%= form.label :name %>
-    <%= form.text_field :name, class: ["block shadow-sm rounded-md border px-3 py-2 mt-2 w-full", {"border-gray-400 focus:outline-blue-600": agency.errors[:name].none?, "border-red-400 focus:outline-red-600": agency.errors[:name].any?}] %>
+  <!-- 🏷️ Thông tin đại lý -->
+  <div class="grid grid-cols-2 gap-5 mb-5">
+    <div>
+      <%= f.label :name, "Tên đại lý", class: "block text-sm font-medium text-gray-700 mb-1" %>
+      <%= f.text_field :name,
+            class: "w-full px-3 py-2 border border-gray-300 rounded-md
+                    focus:ring-2 focus:ring-blue-400 focus:border-blue-400 outline-none" %>
+    </div>
+
+    <div>
+      <%= f.label :phone, "Số điện thoại", class: "block text-sm font-medium text-gray-700 mb-1" %>
+      <%= f.text_field :phone,
+            class: "w-full px-3 py-2 border border-gray-300 rounded-md
+                    focus:ring-2 focus:ring-blue-400 focus:border-blue-400 outline-none" %>
+    </div>
   </div>
 
-  <div class="my-5">
-    <%= form.label :location %>
-    <%= form.text_field :location, class: ["block shadow-sm rounded-md border px-3 py-2 mt-2 w-full", {"border-gray-400 focus:outline-blue-600": agency.errors[:location].none?, "border-red-400 focus:outline-red-600": agency.errors[:location].any?}] %>
+  <div class="grid grid-cols-2 gap-5 mb-5">
+    <div>
+      <%= f.label :email, "Email", class: "block text-sm font-medium text-gray-700 mb-1" %>
+      <%= f.email_field :email,
+            class: "w-full px-3 py-2 border border-gray-300 rounded-md
+                    focus:ring-2 focus:ring-blue-400 focus:border-blue-400 outline-none" %>
+    </div>
+
+    <div>
+      <%= f.label :location, "Địa chỉ", class: "block text-sm font-medium text-gray-700 mb-1" %>
+      <%= f.text_field :location,
+            class: "w-full px-3 py-2 border border-gray-300 rounded-md
+                    focus:ring-2 focus:ring-blue-400 focus:border-blue-400 outline-none" %>
+    </div>
   </div>
 
-  <div class="my-5">
-    <%= form.label :phone %>
-    <%= form.text_field :phone, class: ["block shadow-sm rounded-md border px-3 py-2 mt-2 w-full", {"border-gray-400 focus:outline-blue-600": agency.errors[:phone].none?, "border-red-400 focus:outline-red-600": agency.errors[:phone].any?}] %>
-  </div>
-
-  <div class="my-5">
-    <%= form.label :email %>
-    <%= form.text_field :email, class: ["block shadow-sm rounded-md border px-3 py-2 mt-2 w-full", {"border-gray-400 focus:outline-blue-600": agency.errors[:email].none?, "border-red-400 focus:outline-red-600": agency.errors[:email].any?}] %>
-  </div>
-
-  <div class="inline">
-    <%= form.submit class: "w-full sm:w-auto rounded-md px-3.5 py-2.5 bg-blue-600 hover:bg-blue-500 text-white inline-block font-medium cursor-pointer" %>
+  <!-- ✅ Nút hành động -->
+  <div class="flex justify-end gap-3 pt-3 border-t border-gray-100">
+    <%= link_to "Hủy", agencies_path,
+          class: "px-4 py-2 border border-gray-300 rounded-md text-gray-600 hover:bg-gray-100 transition" %>
+    <%= f.submit (agency.new_record? ? "Tạo đại lý" : "Cập nhật"),
+          class: "px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 transition" %>
   </div>
 <% end %>

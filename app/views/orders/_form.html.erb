@@ -1,31 +1,31 @@
 <%= form_with model: @order,
               method: :post,
               data: { controller: "order-form", turbo: false },
-              class: "space-y-8 bg-white shadow-lg rounded-2xl p-8 border border-gray-100" do |f| %>
+              class: "space-y-8 bg-white border border-gray-200 rounded-lg p-6 w-[700px]" do |f| %>
 
   <!-- 🧭 Header -->
-  <div class="flex items-center justify-between border-b pb-4">
-    <h2 class="text-2xl font-semibold text-gray-800">
-      <%= @order.is_a?(ImportOrder) ? "📦 Tạo phiếu nhập hàng" : "🚚 Tạo phiếu xuất hàng" %>
+  <div class="flex items-center justify-between border-b pb-3">
+    <h2 class="text-xl font-semibold text-gray-800">
+      <%= @order.is_a?(ImportOrder) ? "Tạo phiếu nhập hàng" : "Tạo phiếu xuất hàng" %>
     </h2>
-    <span class="text-sm text-gray-500 italic">Người tạo: <%= current_user.fullname %></span>
+    <span class="text-sm text-gray-500">Người tạo: <%= current_user.fullname %></span>
   </div>
 
   <!-- 🔍 Chọn đại lý -->
-  <div class="space-y-2">
+  <div class="space-y-1">
     <label class="block text-gray-700 font-medium">Tìm đại lý</label>
     <div class="relative">
       <input type="text"
              placeholder="Nhập ID hoặc tên đại lý..."
-             class="border border-gray-300 focus:border-green-500 focus:ring-green-200 rounded-lg w-full p-3 transition"
+             class="border border-gray-300 focus:border-blue-500 focus:ring-0 rounded-md w-full p-2 text-sm"
              data-order-form-target="agencyInput"
              data-action="input->order-form#searchAgency">
 
-      <div class="absolute left-0 right-0 mt-1 hidden bg-white border border-gray-200 rounded-lg shadow-md z-10"
+      <div class="absolute left-0 right-0 mt-1 hidden bg-white border border-gray-200 rounded-md shadow-sm z-10"
            data-order-form-target="agencyResults"></div>
     </div>
 
-    <div class="mt-2 text-green-600 font-medium flex items-center gap-2"
+    <div class="mt-1 text-green-600 font-semibold text-sm"
          data-order-form-target="selectedAgency">
     </div>
 
@@ -33,27 +33,25 @@
   </div>
 
   <!-- 🧾 Chọn sản phẩm -->
-  <div class="space-y-2">
+  <div class="space-y-1">
     <label class="block text-gray-700 font-medium">Tìm sản phẩm</label>
     <div class="relative">
       <input type="text"
              placeholder="Nhập tên hoặc mã sản phẩm..."
-             class="border border-gray-300 focus:border-green-500 focus:ring-green-200 rounded-lg w-full p-3 transition"
+             class="border border-gray-300 focus:border-blue-500 focus:ring-0 rounded-md w-full p-2 text-sm"
              data-order-form-target="productInput"
              data-action="input->order-form#searchProduct">
 
-      <ul class="absolute left-0 right-0 mt-1 hidden bg-white border border-gray-200 rounded-lg shadow-md z-10 divide-y divide-gray-100"
+      <ul class="absolute left-0 right-0 mt-1 hidden bg-white border border-gray-200 rounded-md shadow-sm z-10 divide-y divide-gray-100 text-sm"
           data-order-form-target="productResults"></ul>
     </div>
   </div>
 
   <!-- 🧮 Danh sách sản phẩm -->
-  <div class="space-y-3">
-    <h3 class="text-lg font-semibold text-gray-800 flex items-center gap-2">
-      🧾 Danh sách sản phẩm đã chọn
-    </h3>
+  <div class="space-y-2">
+    <h3 class="text-base font-medium text-gray-800">Danh sách sản phẩm</h3>
 
-    <ul class="border border-gray-200 rounded-lg divide-y divide-gray-100 bg-gray-50"
+    <ul class="border border-gray-200 rounded-md divide-y divide-gray-100 bg-white text-sm"
         data-order-form-target="selectedProducts">
       <!-- Stimulus sẽ render vào đây -->
     </ul>
@@ -70,9 +68,14 @@
   </div>
 
   <!-- ✅ Submit -->
-  <div class="pt-6 flex justify-end border-t">
-    <%= f.submit "💾 Xác nhận đơn hàng",
-          class: "bg-green-600 hover:bg-green-700 text-white font-semibold px-8 py-3 rounded-lg shadow-md transition active:scale-[0.98]" %>
+  <div class="pt-4 flex justify-between border-t">
+    <div class="text-bold items-center"
+      data-order-form-target="orderTotal"
+    >
+      Tổng: 0
+    </div>
+    <%= f.submit "Xác nhận đơn hàng",
+          class: "bg-gray-800 hover:bg-gray-700 text-white px-6 py-2 rounded-md text-sm font-medium" %>
   </div>
 
 <% end %>

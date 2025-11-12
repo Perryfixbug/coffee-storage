@@ -1,28 +1,113 @@
 <!-- app/views/static_pages/home.html.erb -->
-<div class="space-y-8">
-  <h1 class="text-3xl font-bold text-gray-800 mb-2">Tổng quan hệ thống</h1>
-  <p class="text-gray-500 mb-6">Tình hình kho hàng và hoạt động trong 7 ngày gần đây</p>
+<div class="space-y-10">
+  <!-- 🧭 Header -->
+  <div>
+    <h1 class="text-3xl font-bold text-gray-800 mb-1">Tổng quan hệ thống</h1>
+    <p class="text-gray-500">Dữ liệu cập nhật trong 7 ngày gần nhất</p>
+  </div>
 
+  <!-- 📊 Thống kê nhanh -->
   <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-    <div class="bg-white rounded-2xl shadow p-5 border border-gray-100">
-      <div class="text-gray-500 text-sm">Tổng sản phẩm</div>
-      <div class="text-3xl font-semibold text-blue-600 mt-1"><%= Product.count %></div>
+    <div class="bg-white border border-gray-200 rounded-xl p-5 shadow-sm">
+      <div class="text-sm text-gray-500">Tổng sản phẩm</div>
+      <div class="text-3xl font-semibold text-green-600 mt-1"><%= @total_products %></div>
     </div>
-    <div class="bg-white rounded-2xl shadow p-5 border border-gray-100">
-      <div class="text-gray-500 text-sm">Đơn nhập (7 ngày)</div>
-      <div class="text-3xl font-semibold text-green-600 mt-1"><%= ImportOrder.where("created_at >= ?", 7.days.ago).count %></div>
+
+    <div class="bg-white border border-gray-200 rounded-xl p-5 shadow-sm">
+      <div class="text-sm text-gray-500">Tổng đại lý</div>
+      <div class="text-3xl font-semibold text-gray-800 mt-1"><%= @total_agencies %></div>
     </div>
-    <div class="bg-white rounded-2xl shadow p-5 border border-gray-100">
-      <div class="text-gray-500 text-sm">Đơn xuất (7 ngày)</div>
-      <div class="text-3xl font-semibold text-orange-500 mt-1"><%= ExportOrder.where("created_at >= ?", 7.days.ago).count %></div>
+
+    <div class="bg-white border border-gray-200 rounded-xl p-5 shadow-sm">
+      <div class="text-sm text-gray-500">Tổng nhân viên</div>
+      <div class="text-3xl font-semibold text-gray-800 mt-1"><%= @total_users %></div>
     </div>
-    <div class="bg-white rounded-2xl shadow p-5 border border-gray-100">
-      <div class="text-gray-500 text-sm">Giá trị tồn kho</div>
-      <div class="text-3xl font-semibold text-gray-700 mt-1"><%= number_to_currency(Product.sum("quantity * price_per_unit"), unit: "₫", precision: 0) %></div>
+
+    <div class="bg-white border border-gray-200 rounded-xl p-5 shadow-sm">
+      <div class="text-sm text-gray-500">Giá trị tồn kho</div>
+      <div class="text-2xl font-semibold text-gray-800 mt-1"><%= number_to_currency(@total_inventory_value, unit: "₫", precision: 0) %></div>
+    </div>
+
+    <div class="bg-white border border-gray-200 rounded-xl p-5 shadow-sm">
+      <div class="text-sm text-gray-500">Đơn nhập (7 ngày)</div>
+      <div class="text-3xl font-semibold text-blue-600 mt-1"><%= @total_import_orders %></div>
+    </div>
+
+    <div class="bg-white border border-gray-200 rounded-xl p-5 shadow-sm">
+      <div class="text-sm text-gray-500">Đơn xuất (7 ngày)</div>
+      <div class="text-3xl font-semibold text-orange-500 mt-1"><%= @total_export_orders %></div>
     </div>
   </div>
 
-  <div class="text-center mt-8">
-    <%= link_to "➡ Xem chi tiết thống kê", stat_path, class: "inline-block px-6 py-3 bg-blue-600 text-white rounded-xl hover:bg-blue-700 transition" %>
+  <!-- ⚠️ Sản phẩm sắp hết -->
+  <div>
+    <h2 class="text-xl font-semibold text-gray-800 mb-3">Sản phẩm sắp hết hàng</h2>
+    <% if @low_stock_products.any? %>
+      <div class="overflow-x-auto">
+        <table class="min-w-full bg-white border border-gray-200 rounded-lg text-sm">
+          <thead class="bg-gray-50 text-gray-600">
+            <tr>
+              <th class="px-4 py-2 text-left">Mã</th>
+              <th class="px-4 py-2 text-left">Tên</th>
+              <th class="px-4 py-2 text-right">Số lượng</th>
+              <th class="px-4 py-2 text-right">Giá / ĐV</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% @low_stock_products.each do |p| %>
+              <tr class="border-t hover:bg-gray-50">
+                <td class="px-4 py-2"><%= p.product_code %></td>
+                <td class="px-4 py-2"><%= p.name %></td>
+                <td class="px-4 py-2 text-right text-red-600 font-medium"><%= p.quantity %> <%= p.unit %></td>
+                <td class="px-4 py-2 text-right"><%= number_to_currency(p.price_per_unit, unit: "₫", precision: 0) %></td>
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
+      </div>
+    <% else %>
+      <p class="text-gray-500 italic">Không có sản phẩm nào sắp hết hàng.</p>
+    <% end %>
+  </div>
+
+  <!-- 🧾 Hoạt động gần đây -->
+  <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+    <div>
+      <h2 class="text-xl font-semibold text-gray-800 mb-3">Đơn nhập gần đây</h2>
+      <% if @recent_imports.any? %>
+        <ul class="divide-y divide-gray-100 bg-white border border-gray-200 rounded-lg">
+          <% @recent_imports.each do |order| %>
+            <li class="p-3 hover:bg-gray-50 flex justify-between items-center">
+              <span># <%= order.id %> — <%= order.agency&.name || "Không rõ đại lý" %></span>
+              <span class="text-gray-500 text-sm"><%= l(order.created_at, format: :short) %></span>
+            </li>
+          <% end %>
+        </ul>
+      <% else %>
+        <p class="text-gray-500 italic">Không có đơn nhập gần đây.</p>
+      <% end %>
+    </div>
+
+    <div>
+      <h2 class="text-xl font-semibold text-gray-800 mb-3">Đơn xuất gần đây</h2>
+      <% if @recent_exports.any? %>
+        <ul class="divide-y divide-gray-100 bg-white border border-gray-200 rounded-lg">
+          <% @recent_exports.each do |order| %>
+            <li class="p-3 hover:bg-gray-50 flex justify-between items-center">
+              <span># <%= order.id %> — <%= order.agency&.name || "Không rõ đại lý" %></span>
+              <span class="text-gray-500 text-sm"><%= l(order.created_at, format: :short) %></span>
+            </li>
+          <% end %>
+        </ul>
+      <% else %>
+        <p class="text-gray-500 italic">Không có đơn xuất gần đây.</p>
+      <% end %>
+    </div>
+  </div>
+
+  <!-- 📈 Link xem thống kê -->
+  <div class="text-center pt-8">
+    <%= link_to "Xem thống kê chi tiết", stat_path,
+          class: "inline-block px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition" %>
   </div>
 </div>

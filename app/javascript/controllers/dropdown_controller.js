@@ -30,7 +30,7 @@ export default class extends Controller {
     this.timeout = setTimeout(()=>{
     this.menuTarget.classList.remove("visible", "opacity-100")
     this.menuTarget.classList.add("invisible", "opacity-0")
-    }, 1000)
+    }, 500)
   }
 
   close(event){
